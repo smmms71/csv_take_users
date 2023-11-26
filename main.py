@@ -13,7 +13,7 @@ from user import User
 API_TOKEN = "5582271816:AAHWWCkX-XwTEQt2O-RQnbKE2XAaqZFh-fY"
 bot = Bot(token=API_TOKEN)
 PAYMENT_TOKEN = "284685063:TEST:NTBlZDYyODU0ZmM3" # sprite test
-NGROK_URL = "https://7335-138-88-194-9.ngrok-free.app"
+NGROK_URL = "https://5d12-138-88-194-9.ngrok-free.app"
 WEBHOOK_URL = f"{NGROK_URL}/telegram"
 TELEGRAM_BOT_API_URL = f'https://api.telegram.org/bot{API_TOKEN}/'
 TELEGRAM_BOT_FILE_URL = f'https://api.telegram.org/file/bot{API_TOKEN}/'
@@ -112,6 +112,10 @@ async def get_file(request, folder, filename):
 async def get_file2(request, folder, subfolder, filename):
     return await file(f'{folder}/{subfolder}/{filename}')
 
+@app.route('/<folder>/<subfolder1>/<subfolder2>/<filename>')
+async def get_file3(request, folder, subfolder1,subfolder2, filename):
+    return await file(f'{folder}/{subfolder1}/{subfolder2}/{filename}')
+
 async def send_messages(recipient_id: Union[Text, Any], 
         sequence: List[Text],
         texts: List[Union[Text, Any]], 
@@ -163,10 +167,10 @@ async def save_downloaded_file(sender_id, file_url: Text):
     file_name = file.file_unique_id
     extension = file.file_path.split(".")[-1]
 
-    await bot.download_file(file.file_path, f"test.{extension}")
-    await bot.download_file(file.file_path, f"photos/{sender_id}/{file_name}.{extension}")
+    # await bot.download_file(file.file_path, f"test.{extension}")
+    await bot.download_file(file.file_path, f"photos/{sender_id}/input/{file_name}.{extension}")
 
-    return f"photos/{sender_id}/{file_name}.{extension}"
+    return f"photos/{sender_id}/input/{file_name}.{extension}"
 
     # response = await sending_request_file(file_url, method="GET")
     # file_name = file_url.split("/")[-1]
@@ -202,7 +206,7 @@ async def main_program(request_dict):
     user = users[msg_user_id]
     
     # Change the state in the flow with this function
-    await state_handler.state_handler(user, request_dict, NGROK_URL)
+    await state_handler.state_handler(user, request_dict, NGROK_URL,msg_user_name)
 
 if __name__ == "__main__":
     app.run(

@@ -15,6 +15,10 @@ class User:
         self.num = 0
         self.free = True
         self.payment = 0
+        self.service_type = None
+        self.mail_name = None
+        self.download_flag = False
+        self.files_link = []
         
         if not os.path.exists(f"photos/{self.id}"):
             os.mkdir(f"photos/{self.id}")
@@ -34,3 +38,10 @@ class User:
 
     def update_payment(self, payment):
         self.payment = payment
+
+    def user_reset(self): 
+        self.state = STATES[0]
+        self.service_type = None
+        self.mail_name = None
+        self.download_flag = False
+        self.files_link = []
